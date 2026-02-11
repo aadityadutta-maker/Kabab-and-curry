@@ -3,36 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kabab & Curry | Order System</title>
 
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f7f7f7}
-header{background:#111;color:#fff;text-align:center;padding:20px}
-nav{background:#222;text-align:center;padding:10px}
-nav a{color:#fff;margin:0 12px;text-decoration:none;font-weight:bold}
-section{max-width:1200px;margin:auto;padding:25px}
-h2{border-bottom:2px solid #e63946;padding-bottom:5px}
-footer{background:#111;color:#fff;text-align:center;padding:15px}
-.offer{background:#e63946;color:#fff;text-align:center;padding:10px;font-size:18px}
 
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}
-.card{background:#fff;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.1);padding:15px;text-align:center}
-.card button{background:#e63946;color:#fff;border:none;padding:6px 10px;border-radius:5px;cursor:pointer}
+/* ========== BASIC STYLE ========== */
 
-#cart,#adminPanel{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#f7f7f7;
+}
 
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;padding:12px 18px;border-radius:40px;font-weight:bold;text-decoration:none}
+header{
+background:#111;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+nav{
+background:#222;
+text-align:center;
+padding:10px;
+}
+
+nav a{
+color:white;
+margin:0 12px;
+text-decoration:none;
+font-weight:bold;
+}
+
+section{
+max-width:1200px;
+margin:auto;
+padding:25px;
+}
+
+h2{
+border-bottom:2px solid #e63946;
+padding-bottom:5px;
+}
+
+footer{
+background:#111;
+color:white;
+text-align:center;
+padding:15px;
+}
+
+
+/* ========== MENU ========== */
+
+.menu-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+gap:15px;
+}
+
+.card{
+background:white;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,.1);
+padding:15px;
+text-align:center;
+}
+
+.card button{
+background:#e63946;
+color:white;
+border:none;
+padding:7px 12px;
+border-radius:5px;
+cursor:pointer;
+}
+
+
+/* ========== FORM ========== */
+
+input,textarea{
+width:100%;
+padding:8px;
+margin:6px 0;
+}
+
+button{
+background:#e63946;
+color:white;
+border:none;
+padding:8px 12px;
+cursor:pointer;
+border-radius:5px;
+}
+
+
+/* ========== BOXES ========== */
+
+#cart,#adminPanel{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
 </style>
 </head>
+
+
 <body>
 
+<!-- ================= HEADER ================= -->
+
 <header>
-<img src="logo.png" style="max-width:160px"><br>
 <h1>Kabab & Curry</h1>
 <p>Swad Dilli Ka | Rishikesh</p>
 </header>
 
-<div class="offer">🚚 FREE DELIVERY ABOVE ₹300</div>
+
+<!-- ================= NAV ================= -->
 
 <nav>
 <a href="#menu">Menu</a>
@@ -41,120 +131,343 @@ footer{background:#111;color:#fff;text-align:center;padding:15px}
 <a href="#admin">Admin</a>
 </nav>
 
-<!-- MENU -->
+
+<!-- ================= MENU ================= -->
+
 <section id="menu">
+
 <h2>Menu</h2>
 
 <div class="menu-grid">
-<div class="card"><h4>Veg Clear Soup</h4><p>₹80</p><button onclick="add('Veg Clear Soup',80)">Add</button></div>
-<div class="card"><h4>Paneer Tikka</h4><p>₹250</p><button onclick="add('Paneer Tikka',250)">Add</button></div>
-<div class="card"><h4>Chicken Tikka</h4><p>₹280</p><button onclick="add('Chicken Tikka',280)">Add</button></div>
-<div class="card"><h4>Chilly Chicken</h4><p>₹280</p><button onclick="add('Chilly Chicken',280)">Add</button></div>
-<div class="card"><h4>Fish Tikka</h4><p>₹300</p><button onclick="add('Fish Tikka',300)">Add</button></div>
+
+<div class="card">
+<h4>Paneer Tikka</h4>
+<p>₹250</p>
+<button onclick="add('Paneer Tikka',250)">Add</button>
 </div>
+
+<div class="card">
+<h4>Chicken Tikka</h4>
+<p>₹280</p>
+<button onclick="add('Chicken Tikka',280)">Add</button>
+</div>
+
+<div class="card">
+<h4>Chilly Chicken</h4>
+<p>₹280</p>
+<button onclick="add('Chilly Chicken',280)">Add</button>
+</div>
+
+<div class="card">
+<h4>Fish Tikka</h4>
+<p>₹300</p>
+<button onclick="add('Fish Tikka',300)">Add</button>
+</div>
+
+</div>
+
 </section>
 
-<!-- CART -->
+
+<!-- ================= CART ================= -->
+
 <section id="cart">
+
 <h2>Your Cart</h2>
+
 <div id="cartItems"></div>
+
 <h3>Total: ₹<span id="total">0</span></h3>
+
 </section>
 
-<!-- BILLING -->
+
+<!-- ================= BILLING ================= -->
+
 <section id="billing">
-<h2>Billing</h2>
+
+<h2>Login with OTP</h2>
+
+
+<!-- LOGIN -->
+
+<div id="loginBox">
+
+<input id="loginPhone" placeholder="Enter Mobile Number">
+
+<button onclick="sendOTP()">Send OTP</button>
+
+</div>
+
+
+<!-- OTP -->
+
+<div id="otpBox" style="display:none">
+
+<input id="otpInput" placeholder="Enter OTP">
+
+<button onclick="verifyOTP()">Verify OTP</button>
+
+<p id="otpMsg"></p>
+
+</div>
+
+
+<!-- PAYMENT -->
+
+<div id="paymentBox" style="display:none">
+
+<h3>Billing Details</h3>
+
 <input id="name" placeholder="Name">
+
 <input id="phone" placeholder="Phone">
+
 <textarea id="address" placeholder="Address"></textarea>
+
 <button onclick="placeOrder()">Place Order</button>
+
 <p id="msg"></p>
+
+</div>
+
 </section>
 
-<!-- ADMIN -->
-<section id="admin">
-<h2>Admin Confirmation Panel</h2>
 
-<input type="password" id="adminPass" placeholder="Admin Password">
+<!-- ================= ADMIN ================= -->
+
+<section id="admin">
+
+<h2>Admin Panel</h2>
+
+<input type="password" id="adminPass" placeholder="Password">
+
 <button onclick="adminLogin()">Login</button>
 
+
 <div id="adminPanel" style="display:none">
-<h3>Pending Orders</h3>
+
+<h3>Orders</h3>
+
 <div id="orders"></div>
+
 </div>
+
 </section>
 
+
+<!-- ================= FOOTER ================= -->
+
 <footer>
-<p>© 2026 Kabab & Curry</p>
+© 2026 Kabab & Curry
 </footer>
 
-<a class="whatsapp" href="https://wa.me/919630697343" target="_blank">💬 WhatsApp</a>
+
+
+<!-- ================= SCRIPT ================= -->
 
 <script>
-const PASSWORD="admin123";
+
+/* ===== CART SYSTEM ===== */
+
 let cart=[];
 let total=0;
 let orders=[];
 
+
 function add(name,price){
- cart.push({name,price});
- total+=price;
- render();
+
+cart.push({name,price});
+total+=price;
+
+render();
+
 }
+
 
 function render(){
- let html="";
- cart.forEach((i,n)=>{
- html+=`${n+1}. ${i.name} - ₹${i.price}<br>`;
- });
- document.getElementById("cartItems").innerHTML=html;
- document.getElementById("total").innerText=total;
+
+let html="";
+
+cart.forEach((item,i)=>{
+
+html+=`${i+1}. ${item.name} - ₹${item.price}<br>`;
+
+});
+
+document.getElementById("cartItems").innerHTML=html;
+document.getElementById("total").innerText=total;
+
 }
+
+
+/* ===== DEMO OTP ===== */
+
+let demoOTP="";
+let verified=false;
+
+
+function sendOTP(){
+
+let phone=document.getElementById("loginPhone").value;
+
+if(phone.length<10){
+
+alert("Enter valid mobile number");
+return;
+
+}
+
+// Generate 4 digit OTP
+demoOTP=Math.floor(1000+Math.random()*9000);
+
+// Show OTP (DEMO)
+alert("Your OTP is: "+demoOTP);
+
+document.getElementById("otpBox").style.display="block";
+
+}
+
+
+function verifyOTP(){
+
+let userOTP=document.getElementById("otpInput").value;
+
+if(userOTP==demoOTP){
+
+verified=true;
+
+document.getElementById("otpMsg").innerText="✅ Verified Successfully";
+
+document.getElementById("loginBox").style.display="none";
+document.getElementById("otpBox").style.display="none";
+
+document.getElementById("paymentBox").style.display="block";
+
+}else{
+
+document.getElementById("otpMsg").innerText="❌ Wrong OTP";
+
+}
+
+}
+
+
+/* ===== ORDER SYSTEM ===== */
 
 function placeOrder(){
- let n=document.getElementById("name").value;
- let p=document.getElementById("phone").value;
- let a=document.getElementById("address").value;
 
- if(n===""||p===""||a===""||cart.length==0){
- alert("Fill all details & add items");return;
- }
+if(!verified){
 
- let order={name:n,phone:p,address:a,items:[...cart],total:total,status:'Pending'};
- orders.push(order);
+alert("Please verify OTP first");
+return;
 
- cart=[]; total=0; render();
- document.getElementById("msg").innerText="Order Sent. Waiting for Confirmation.";
- alert("Order Placed. Please wait for confirmation.");
 }
+
+let n=document.getElementById("name").value;
+let p=document.getElementById("phone").value;
+let a=document.getElementById("address").value;
+
+
+if(n==""||p==""||a==""||cart.length==0){
+
+alert("Fill all details and add items");
+return;
+
+}
+
+
+orders.push({
+
+name:n,
+phone:p,
+address:a,
+items:[...cart],
+total:total,
+status:"Pending"
+
+});
+
+
+cart=[];
+total=0;
+
+render();
+
+document.getElementById("msg").innerText="Order Placed Successfully ✅";
+
+alert("Order Sent");
+
+}
+
+
+/* ===== ADMIN ===== */
+
+const PASSWORD="admin123";
+
 
 function adminLogin(){
- if(document.getElementById("adminPass").value===PASSWORD){
- document.getElementById("adminPanel").style.display="block";
- showOrders();
- }else{alert("Wrong Password");}
+
+let pass=document.getElementById("adminPass").value;
+
+if(pass===PASSWORD){
+
+document.getElementById("adminPanel").style.display="block";
+
+showOrders();
+
+}else{
+
+alert("Wrong Password");
+
 }
+
+}
+
 
 function showOrders(){
- let html="";
- orders.forEach((o,i)=>{
- html+=`<div style='border:1px solid #ccc;padding:10px;margin:10px'>
- <b>${o.name}</b> (${o.phone})<br>
- ${o.address}<br>
- Items: ${o.items.map(x=>x.name).join(', ')}<br>
- Total: ₹${o.total}<br>
- Status: ${o.status}<br>
- <button onclick='confirm(${i})'>Confirm</button>
- </div>`;
- });
- document.getElementById("orders").innerHTML=html;
+
+let html="";
+
+orders.forEach((o,i)=>{
+
+html+=`
+
+<div style="border:1px solid #ccc;padding:10px;margin:10px">
+
+<b>${o.name}</b> (${o.phone})<br>
+
+${o.address}<br>
+
+Items: ${o.items.map(x=>x.name).join(", ")}<br>
+
+Total: ₹${o.total}<br>
+
+Status: ${o.status}<br>
+
+<button onclick="confirm(${i})">Confirm</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("orders").innerHTML=html;
+
 }
 
+
 function confirm(i){
- orders[i].status="Confirmed";
- alert("Order Confirmed");
- showOrders();
+
+orders[i].status="Confirmed";
+
+alert("Order Confirmed");
+
+showOrders();
+
 }
+
 </script>
 
 </body>
