@@ -4,21 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Kabab & Curry | Order System</title>
+<title>Kabab & Curry</title>
 
 <style>
 
+/* ========== GENERAL ========== */
+
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial, sans-serif;
 background:#f7f7f7;
 }
 
 header{
-background:#111;
+background:black;
 color:white;
 text-align:center;
 padding:20px;
+}
+
+header img{
+width:180px;
+margin-bottom:10px;
 }
 
 nav{
@@ -29,7 +36,7 @@ padding:10px;
 
 nav a{
 color:white;
-margin:0 12px;
+margin:0 15px;
 text-decoration:none;
 font-weight:bold;
 }
@@ -46,78 +53,122 @@ padding-bottom:5px;
 }
 
 footer{
-background:#111;
+background:black;
 color:white;
 text-align:center;
 padding:15px;
 }
 
-.menu-grid{
+
+/* ========== MENU DROPDOWN ========== */
+
+.menu-section{
+background:white;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,.1);
+overflow:hidden;
+}
+
+.menu-title{
+background:#e63946;
+color:white;
+padding:15px;
+font-size:20px;
+cursor:pointer;
+}
+
+.menu-content{
+display:none;
+padding:15px;
+animation:slide 0.4s ease;
+}
+
+@keyframes slide{
+from{opacity:0;transform:translateY(-10px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+
+/* ========== FOOD CARD ========== */
+
+.food-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
 gap:15px;
 }
 
-.card{
-background:white;
+.food-card{
+border:1px solid #ddd;
 border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,.1);
-padding:15px;
+overflow:hidden;
 text-align:center;
+transition:0.3s;
 }
 
-.card button{
+.food-card:hover{
+transform:scale(1.05);
+box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+.food-card img{
+width:100%;
+height:150px;
+object-fit:cover;
+}
+
+.food-card h4{
+margin:8px 0;
+}
+
+.food-card p{
+color:#e63946;
+font-weight:bold;
+}
+
+.food-card button{
 background:#e63946;
 color:white;
 border:none;
 padding:7px 12px;
 border-radius:5px;
 cursor:pointer;
+margin-bottom:10px;
 }
 
-input,textarea{
-width:100%;
-padding:8px;
-margin:6px 0;
-}
 
-button{
-background:#e63946;
-color:white;
-border:none;
-padding:8px 12px;
-cursor:pointer;
-border-radius:5px;
-}
+/* ========== CART ========== */
 
-#cart,#adminPanel,#otpBox{
+#cart{
 background:white;
-padding:20px;
 border-radius:10px;
+padding:20px;
 box-shadow:0 2px 5px rgba(0,0,0,.1);
-}
-
-#otpBox{
-display:none;
-margin-top:15px;
-border:2px dashed #e63946;
 }
 
 </style>
 </head>
 
+
 <body>
 
+<!-- HEADER -->
+
 <header>
+
+<img src="logo.png">
+
 <h1>Kabab & Curry</h1>
 <p>Swad Dilli Ka | Rishikesh</p>
+
 </header>
+
+
+<!-- NAV -->
 
 <nav>
 <a href="#menu">Menu</a>
 <a href="#cart">Cart</a>
-<a href="#billing">Billing</a>
-<a href="#admin">Admin</a>
 </nav>
 
 
@@ -125,35 +176,163 @@ border:2px dashed #e63946;
 
 <section id="menu">
 
-<h2>Menu</h2>
+<h2>Our Menu</h2>
 
-<div class="menu-grid">
 
-<div class="card">
+<!-- SOUPS -->
+
+<div class="menu-section">
+
+<div class="menu-title" onclick="toggle(this)">
+🥣 Soups
+</div>
+
+<div class="menu-content">
+
+<div class="food-grid">
+
+<div class="food-card">
+<img src="images/soup.jpg">
+<h4>Veg Clear Soup</h4>
+<p>₹80</p>
+<button onclick="add('Veg Clear Soup',80)">Add</button>
+</div>
+
+<div class="food-card">
+<img src="images/soup.jpg">
+<h4>Chicken Soup</h4>
+<p>₹130</p>
+<button onclick="add('Chicken Soup',130)">Add</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- VEG STARTER -->
+
+<div class="menu-section">
+
+<div class="menu-title" onclick="toggle(this)">
+🥗 Veg Starters
+</div>
+
+<div class="menu-content">
+
+<div class="food-grid">
+
+<div class="food-card">
+<img src="images/paneer.jpg">
 <h4>Paneer Tikka</h4>
 <p>₹250</p>
 <button onclick="add('Paneer Tikka',250)">Add</button>
 </div>
 
-<div class="card">
+<div class="food-card">
+<img src="images/paneer.jpg">
+<h4>Malai Chaap</h4>
+<p>₹270</p>
+<button onclick="add('Malai Chaap',270)">Add</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- NON VEG -->
+
+<div class="menu-section">
+
+<div class="menu-title" onclick="toggle(this)">
+🍗 Non-Veg Starters
+</div>
+
+<div class="menu-content">
+
+<div class="food-grid">
+
+<div class="food-card">
+<img src="images/chicken.jpg">
 <h4>Chicken Tikka</h4>
 <p>₹280</p>
 <button onclick="add('Chicken Tikka',280)">Add</button>
 </div>
 
-<div class="card">
-<h4>Chilly Chicken</h4>
-<p>₹280</p>
-<button onclick="add('Chilly Chicken',280)">Add</button>
-</div>
-
-<div class="card">
-<h4>Fish Tikka</h4>
+<div class="food-card">
+<img src="images/chicken.jpg">
+<h4>Chicken Lollipop</h4>
 <p>₹300</p>
-<button onclick="add('Fish Tikka',300)">Add</button>
+<button onclick="add('Chicken Lollipop',300)">Add</button>
 </div>
 
 </div>
+</div>
+</div>
+
+
+<!-- RICE -->
+
+<div class="menu-section">
+
+<div class="menu-title" onclick="toggle(this)">
+🍚 Rice & Biryani
+</div>
+
+<div class="menu-content">
+
+<div class="food-grid">
+
+<div class="food-card">
+<img src="images/biryani.jpg">
+<h4>Chicken Biryani</h4>
+<p>₹230</p>
+<button onclick="add('Chicken Biryani',230)">Add</button>
+</div>
+
+<div class="food-card">
+<img src="images/biryani.jpg">
+<h4>Mutton Biryani</h4>
+<p>₹330</p>
+<button onclick="add('Mutton Biryani',330)">Add</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- NOODLES -->
+
+<div class="menu-section">
+
+<div class="menu-title" onclick="toggle(this)">
+🍜 Noodles
+</div>
+
+<div class="menu-content">
+
+<div class="food-grid">
+
+<div class="food-card">
+<img src="images/noodles.jpg">
+<h4>Veg Hakka Noodles</h4>
+<p>₹150</p>
+<button onclick="add('Veg Hakka',150)">Add</button>
+</div>
+
+<div class="food-card">
+<img src="images/noodles.jpg">
+<h4>Chicken Noodles</h4>
+<p>₹200</p>
+<button onclick="add('Chicken Noodles',200)">Add</button>
+</div>
+
+</div>
+</div>
+</div>
+
 
 </section>
 
@@ -166,69 +345,17 @@ border:2px dashed #e63946;
 
 <div id="cartItems"></div>
 
-<h3>Total: ₹<span id="total">0</span></h3>
+<h3>Total: ₹ <span id="total">0</span></h3>
 
 </section>
 
 
-<!-- BILLING -->
-
-<section id="billing">
-
-<h2>Billing</h2>
-
-<!-- BILL FORM -->
-
-<input id="name" placeholder="Name">
-<input id="phone" placeholder="Phone">
-<textarea id="address" placeholder="Address"></textarea>
-
-<button onclick="startOTP()">Place Order</button>
-
-<p id="msg"></p>
-
-
-<!-- OTP BOX -->
-
-<div id="otpBox">
-
-<h3>OTP Verification</h3>
-
-<input id="otpInput" placeholder="Enter OTP">
-
-<button onclick="verifyOTP()">Verify & Confirm</button>
-
-<p id="otpMsg"></p>
-
-</div>
-
-</section>
-
-
-<!-- ADMIN -->
-
-<section id="admin">
-
-<h2>Admin Panel</h2>
-
-<input type="password" id="adminPass" placeholder="Password">
-
-<button onclick="adminLogin()">Login</button>
-
-<div id="adminPanel" style="display:none">
-
-<h3>Orders</h3>
-
-<div id="orders"></div>
-
-</div>
-
-</section>
-
+<!-- FOOTER -->
 
 <footer>
 © 2026 Kabab & Curry
 </footer>
+
 
 
 <script>
@@ -237,15 +364,17 @@ border:2px dashed #e63946;
 
 let cart=[];
 let total=0;
-let orders=[];
+
 
 function add(name,price){
 
 cart.push({name,price});
 total+=price;
+
 render();
 
 }
+
 
 function render(){
 
@@ -266,151 +395,22 @@ const cartItems=document.getElementById("cartItems");
 const totalSpan=document.getElementById("total");
 
 
-/* OTP SYSTEM */
+/* DROPDOWN */
 
-let demoOTP="";
-let otpVerified=false;
+function toggle(x){
 
+let content=x.nextElementSibling;
 
-// Start OTP
-function startOTP(){
-
-let n=name.value;
-let p=phone.value;
-let a=address.value;
-
-if(n==""||p==""||a==""||cart.length==0){
-
-alert("Fill all details & add items");
-return;
-
-}
-
-// Generate OTP
-demoOTP=Math.floor(1000+Math.random()*9000);
-
-alert("Your OTP: "+demoOTP); // DEMO
-
-otpBox.style.display="block";
-
-}
-
-
-// Verify OTP
-function verifyOTP(){
-
-if(otpInput.value==demoOTP){
-
-otpVerified=true;
-
-otpMsg.innerText="✅ Verified";
-
-finalOrder();
-
+if(content.style.display==="block"){
+content.style.display="none";
 }else{
-
-otpMsg.innerText="❌ Wrong OTP";
-
+content.style.display="block";
 }
-
-}
-
-
-/* FINAL ORDER */
-
-function finalOrder(){
-
-if(!otpVerified) return;
-
-orders.push({
-
-name:name.value,
-phone:phone.value,
-address:address.value,
-items:[...cart],
-total:total,
-status:"Pending"
-
-});
-
-cart=[];
-total=0;
-
-render();
-
-msg.innerText="Order Placed Successfully ✅";
-
-alert("Order Confirmed");
-
-otpBox.style.display="none";
-
-otpVerified=false;
-
-}
-
-
-/* ADMIN */
-
-const PASSWORD="admin123";
-
-function adminLogin(){
-
-if(adminPass.value==="admin123"){
-
-adminPanel.style.display="block";
-showOrders();
-
-}else{
-
-alert("Wrong Password");
-
-}
-
-}
-
-function showOrders(){
-
-let html="";
-
-orders.forEach((o,i)=>{
-
-html+=`
-
-<div style="border:1px solid #ccc;padding:10px;margin:10px">
-
-<b>${o.name}</b> (${o.phone})<br>
-
-${o.address}<br>
-
-${o.items.map(x=>x.name).join(", ")}<br>
-
-₹${o.total}<br>
-
-${o.status}<br>
-
-<button onclick="confirm(${i})">Confirm</button>
-
-</div>
-
-`;
-
-});
-
-orders.innerHTML=html;
-
-}
-
-function confirm(i){
-
-orders[i].status="Confirmed";
-
-alert("Confirmed");
-
-showOrders();
 
 }
 
 </script>
+
 
 </body>
 </html>
