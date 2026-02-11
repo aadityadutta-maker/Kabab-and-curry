@@ -1,158 +1,194 @@
 <!DOCTYPE html>
+<!-- FULL CLOUD SYSTEM TEMPLATE USING FIREBASE -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kabab & Curry | Rishikesh</title>
+<title>Kabab & Curry | Cloud System</title>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f7f7f7}
-header{background:#111;color:#fff;text-align:center;padding:20px}
-nav{background:#222;text-align:center;padding:10px}
-nav a{color:#fff;margin:0 12px;text-decoration:none;font-weight:bold}
-section{max-width:1100px;margin:auto;padding:25px}
-h2{border-bottom:2px solid #e63946;padding-bottom:5px}
-footer{background:#111;color:#fff;text-align:center;padding:15px}
-.offer{background:#e63946;color:#fff;text-align:center;padding:10px;font-size:18px}
-
-/* Menu */
-details{background:#fff;margin:15px 0;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-summary{padding:15px;font-size:20px;font-weight:bold;cursor:pointer;color:#e63946}
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;padding:15px}
-.card{background:#fafafa;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.card img{width:100%;height:150px;object-fit:cover}
-.card div{padding:10px}
-.card h4{margin:5px 0;color:#333}
-.card p{margin:0;font-weight:bold;color:#e63946}
-
-/* WhatsApp */
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;padding:12px 18px;border-radius:40px;font-weight:bold;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-
+body{font-family:Arial;background:#f7f7f7;margin:0}
+header{background:#111;color:#fff;text-align:center;padding:15px}
+section{max-width:900px;margin:auto;padding:20px}
+input,button{padding:10px;margin:5px;width:100%}
+button{background:#e63946;color:#fff;border:none}
+.card{background:#fff;padding:15px;margin:10px 0;border-radius:8px}
 </style>
 </head>
 <body>
 
 <header>
-<h1>Kabab & Curry</h1>
-<p>Swad Dilli Ka | Rishikesh</p>
-<p>📞 9630697343 | 7817897343</p>
+<h2>Kabab & Curry – Cloud Order System</h2>
 </header>
 
-<div class="offer">🚚 FREE DELIVERY on Orders Above ₹300 (Within 2 KM)</div>
+<!-- LOGIN -->
+<section id="login">
+<h3>Customer Login (OTP)</h3>
+<input id="phone" placeholder="+91XXXXXXXXXX">
+<button onclick="sendOTP()">Send OTP</button>
 
-<nav>
-<a href="#home">Home</a>
-<a href="#menu">Menu</a>
-<a href="#contact">Contact</a>
-</nav>
+<input id="otp" placeholder="Enter OTP">
+<button onclick="verifyOTP()">Verify</button>
 
-<section id="home">
-<h2>Welcome</h2>
-<p>Authentic North Indian, Tandoori & Chinese Food in Rishikesh. Taste of Delhi at your doorstep.</p>
+<div id="recaptcha"></div>
 </section>
 
-<!-- MENU -->
-<section id="menu">
-<h2>Our Menu</h2>
+<!-- ORDER -->
+<section id="order" style="display:none">
+<h3>Place Order</h3>
 
-<!-- SOUPS -->
-<details open>
-<summary>🥣 Soups</summary>
-<div class="menu-grid">
+<select id="item">
+<option value="80">Veg Clear Soup – ₹80</option>
+<option value="250">Paneer Tikka – ₹250</option>
+<option value="280">Chicken Tikka – ₹280</option>
+<option value="280">Chilly Chicken – ₹280</option>
+</select>
 
-<div class="card"><img src="https://source.unsplash.com/400x300/?vegetable-soup"><div><h4>Veg Clear</h4><p>₹80</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?hot-sour-soup"><div><h4>Veg Hot & Sour</h4><p>₹100</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?manchow-soup"><div><h4>Veg Manchow</h4><p>₹100</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?tomato-soup"><div><h4>Tomato Soup</h4><p>₹100</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?lemon-coriander-soup"><div><h4>Lemon Coriander</h4><p>₹100</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?sweet-corn-soup"><div><h4>Sweet Corn</h4><p>₹100</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-soup"><div><h4>Chicken Clear</h4><p>₹100</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-hot-sour-soup"><div><h4>Chicken Hot & Sour</h4><p>₹130</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-manchow-soup"><div><h4>Chicken Manchow</h4><p>₹130</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-corn-soup"><div><h4>Chicken Sweet Corn</h4><p>₹130</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?lemon-chicken-soup"><div><h4>Chicken Lemon Coriander</h4><p>₹130</p></div></div>
+<input id="qty" type="number" value="1">
+<button onclick="add()">Add</button>
 
-</div>
-</details>
+<div id="cart"></div>
+<h3>Total: ₹<span id="total">0</span></h3>
 
-<!-- VEG STARTER -->
-<details>
-<summary>🥗 Veg Starters</summary>
-<div class="menu-grid">
-
-<div class="card"><img src="https://source.unsplash.com/400x300/?paneer-tikka"><div><h4>Paneer Tikka</h4><p>₹250</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?achari-paneer"><div><h4>Paneer Achari</h4><p>₹270</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?garlic-paneer"><div><h4>Paneer Lahsuni</h4><p>₹280</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?tandoori-chaap"><div><h4>Tandoori Chaap</h4><p>₹250</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?malai-chaap"><div><h4>Malai Chaap</h4><p>₹270</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?mushroom-tikka"><div><h4>Mushroom Tikka</h4><p>₹250</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?veg-kabab"><div><h4>Veg Seekh Kabab</h4><p>₹250</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?lahsuni-chaap"><div><h4>Lahsuni Chaap</h4><p>₹280</p></div></div>
-
-</div>
-</details>
-
-<!-- NON VEG STARTER -->
-<details>
-<summary>🍗 Non-Veg Starters</summary>
-<div class="menu-grid">
-
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-seekh-kabab"><div><h4>Chicken Seekh Kabab</h4><p>₹280</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?mutton-kabab"><div><h4>Mutton Seekh Kabab</h4><p>₹380</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?tandoori-chicken"><div><h4>Tandoori Chicken</h4><p>₹240/440</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?afghani-chicken"><div><h4>Afghani Chicken</h4><p>₹300/550</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?kalmi-kabab"><div><h4>Kalmi Kabab</h4><p>₹400</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-tikka"><div><h4>Chicken Tikka</h4><p>₹280</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-malai-tikka"><div><h4>Chicken Malai Tikka</h4><p>₹300</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?achari-chicken"><div><h4>Achari Tikka</h4><p>₹300</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?stuffed-chicken"><div><h4>Stuffed Tangdi</h4><p>₹450</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-kali-mirch"><div><h4>Kali Mirch Tikka</h4><p>₹320</p></div></div>
-
-</div>
-</details>
-
-<!-- CHINESE -->
-<details>
-<summary>🍜 Chinese Starters</summary>
-<div class="menu-grid">
-
-<div class="card"><img src="https://source.unsplash.com/400x300/?chilli-potato"><div><h4>Honey Chilly Potato</h4><p>₹200</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?crispy-corn"><div><h4>Crispy Fried Corn</h4><p>₹250</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?veg-manchurian"><div><h4>Veg Manchurian</h4><p>₹200/230</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?french-fries"><div><h4>French Fries</h4><p>₹180</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?paneer-chilli"><div><h4>Chilly Paneer</h4><p>₹250</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?paneer-manchurian"><div><h4>Paneer Manchurian</h4><p>₹250</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?chicken-lollipop"><div><h4>Chicken Lollipop</h4><p>₹300</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?drum-of-heaven"><div><h4>Drum of Heaven</h4><p>₹330</p></div></div>
-
-</div>
-</details>
-
-<!-- FISH -->
-<details>
-<summary>🐟 Fish (Seasonal)</summary>
-<div class="menu-grid">
-
-<div class="card"><img src="https://source.unsplash.com/400x300/?fish-tikka"><div><h4>Fish Tikka</h4><p>₹300</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?fried-fish"><div><h4>Fish Fry</h4><p>₹270</p></div></div>
-<div class="card"><img src="https://source.unsplash.com/400x300/?fish-kabab"><div><h4>Fish Lahsuni Tikka</h4><p>₹330</p></div></div>
-
-</div>
-</details>
-
+<button onclick="placeOrder()">Confirm Order</button>
 </section>
 
-<section id="contact">
-<h2>Contact Us</h2>
-<p>📍 C-1, VIP Bairaj Colony, Near AIIMS, Pashulok, Rishikesh</p>
-<p>📞 9630697343 / 7817897343</p>
+<!-- ADMIN -->
+<section id="admin" style="display:none">
+<h3>Admin Panel</h3>
+<div id="orders"></div>
+<button onclick="downloadReport()">Download Daily Report</button>
 </section>
 
-<footer>
-<p>© 2026 Kabab & Curry | All Rights Reserved</p>
-</footer>
+<script>
 
-<a class="whatsapp" href="https://wa.me/919630697343" target="_blank">💬 Order on WhatsApp</a>
+/* FIREBASE CONFIG (REPLACE WITH YOURS) */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
 
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* OTP LOGIN */
+let confirmation;
+
+window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha');
+
+function sendOTP(){
+ const phone=document.getElementById("phone").value;
+ auth.signInWithPhoneNumber(phone,window.recaptchaVerifier)
+ .then(res=>{
+ confirmation=res;
+ alert("OTP Sent");
+ });
+}
+
+function verifyOTP(){
+ const code=document.getElementById("otp").value;
+ confirmation.confirm(code).then(res=>{
+ document.getElementById("login").style.display="none";
+ document.getElementById("order").style.display="block";
+ loadAdmin();
+ });
+}
+
+/* CART */
+let cart=[];let total=0;
+
+function add(){
+ const sel=document.getElementById("item");
+ const price=parseInt(sel.value);
+ const name=sel.options[sel.selectedIndex].text;
+ const qty=parseInt(document.getElementById("qty").value);
+
+ cart.push({name,price,qty});
+ total+=price*qty;
+ render();
+}
+
+function render(){
+ let html="";
+ cart.forEach(i=>{
+ html+=`${i.name} x ${i.qty}<br>`;
+ });
+ document.getElementById("cart").innerHTML=html;
+ document.getElementById("total").innerText=total;
+}
+
+/* PLACE ORDER */
+function placeOrder(){
+ const user=auth.currentUser.phoneNumber;
+
+ db.collection("orders").add({
+  user:user,
+  items:cart,
+  total:total,
+  status:"Pending",
+  date:new Date()
+ });
+
+ alert("Order Placed. You will get confirmation.");
+ cart=[];total=0;render();
+}
+
+/* ADMIN PANEL */
+function loadAdmin(){
+ auth.onAuthStateChanged(user=>{
+  if(user && user.phoneNumber==="+919630697343"){
+   document.getElementById("admin").style.display="block";
+   fetchOrders();
+  }
+ });
+}
+
+function fetchOrders(){
+ db.collection("orders").onSnapshot(snap=>{
+  let html="";
+  snap.forEach(doc=>{
+   let o=doc.data();
+   html+=`<div class='card'>
+   ${o.user}<br>Total ₹${o.total}<br>Status:${o.status}
+   <button onclick=confirm('${doc.id}')>Confirm</button>
+   </div>`;
+  });
+  document.getElementById("orders").innerHTML=html;
+ });
+}
+
+function confirm(id){
+ db.collection("orders").doc(id).update({status:"Confirmed"});
+}
+
+/* REPORT */
+function downloadReport(){
+ db.collection("orders").get().then(snap=>{
+  let csv="User,Total,Status\n";
+  snap.forEach(d=>{
+   let o=d.data();
+   csv+=`${o.user},${o.total},${o.status}\n`;
+  });
+
+  let blob=new Blob([csv]);
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="sales.csv";
+  a.click();
+ });
+}
+
+</script>
 </body>
 </html>
