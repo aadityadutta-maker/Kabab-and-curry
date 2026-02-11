@@ -98,22 +98,3 @@
       document.getElementById("adminPanel").style.display = "block";
       alert("Admin Access Granted");
     } else {
-      alert("Wrong Password");
-    }
-  }
-
-  function addItem(){
-    const name = document.getElementById("itemName").value;
-    const price = document.getElementById("itemPrice").value;
-
-    if(name === "" || price === ""){
-      alert("Fill all fields");
-      return;
-    }
-
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `<h3>${name}</h3><p>₹${price}</p>`;
-
-    document.getElementById("menuItems").appendChild(div);
-
