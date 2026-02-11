@@ -1,194 +1,129 @@
-<!DOCTYPE html>
-<!-- FULL CLOUD SYSTEM TEMPLATE USING FIREBASE -->
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kabab & Curry | Cloud System</title>
+<title>Kabab & Curry | Online Ordering</title><style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fafafa;color:#222}
+header{background:linear-gradient(135deg,#111,#2a2a2a);color:#fff;text-align:center;padding:20px}
+header img{max-width:160px;margin-bottom:10px}
+nav{background:#e63946;text-align:center;padding:10px}
+nav a{color:#fff;margin:0 12px;text-decoration:none;font-weight:bold}
+section{max-width:1200px;margin:auto;padding:25px}
+h2{border-bottom:2px solid #e63946;padding-bottom:6px}
+footer{background:#111;color:#fff;text-align:center;padding:15px}
+.offer{background:#ffd166;color:#111;text-align:center;padding:10px;font-weight:bold}
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+details{background:#fff;margin:15px 0;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+summary{padding:15px;font-size:20px;font-weight:bold;cursor:pointer;color:#e63946}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px;padding:15px}
+.card{background:#fafafa;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:12px;text-align:center}
+.card h4{margin:5px 0}
+.card p{margin:5px 0;color:#e63946;font-weight:bold}
+.card button{background:#e63946;color:#fff;border:none;padding:6px 12px;border-radius:5px;cursor:pointer}
 
-<style>
-body{font-family:Arial;background:#f7f7f7;margin:0}
-header{background:#111;color:#fff;text-align:center;padding:15px}
-section{max-width:900px;margin:auto;padding:20px}
-input,button{padding:10px;margin:5px;width:100%}
-button{background:#e63946;color:#fff;border:none}
-.card{background:#fff;padding:15px;margin:10px 0;border-radius:8px}
-</style>
-</head>
-<body>
-
-<header>
-<h2>Kabab & Curry – Cloud Order System</h2>
-</header>
-
-<!-- LOGIN -->
-<section id="login">
-<h3>Customer Login (OTP)</h3>
-<input id="phone" placeholder="+91XXXXXXXXXX">
-<button onclick="sendOTP()">Send OTP</button>
-
-<input id="otp" placeholder="Enter OTP">
-<button onclick="verifyOTP()">Verify</button>
-
-<div id="recaptcha"></div>
-</section>
-
-<!-- ORDER -->
-<section id="order" style="display:none">
-<h3>Place Order</h3>
-
-<select id="item">
-<option value="80">Veg Clear Soup – ₹80</option>
-<option value="250">Paneer Tikka – ₹250</option>
-<option value="280">Chicken Tikka – ₹280</option>
-<option value="280">Chilly Chicken – ₹280</option>
-</select>
-
-<input id="qty" type="number" value="1">
-<button onclick="add()">Add</button>
-
-<div id="cart"></div>
+#cartBox{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+input,textarea,button{padding:10px;margin:6px 0;width:100%}
+button{background:#e63946;color:#fff;border:none;cursor:pointer}
+</style></head>
+<body><header>
+<img src="logo.png" alt="Logo">
+<h1>Kabab & Curry</h1>
+<p>स्वाद दिल्ली का | Rishikesh</p>
+<p>📞 9630697343 | 7817897343</p>
+</header><div class="offer">🚚 FREE DELIVERY ABOVE ₹300 (Within 2 KM)</div><nav>
+<a href="#menu">Menu</a>
+<a href="#cart">Cart</a>
+<a href="#checkout">Checkout</a>
+<a href="#admin">Admin</a>
+</nav><section id="menu">
+<h2>Our Complete Menu</h2><!-- NON VEG MAIN COURSE --><details><summary>🍗 Non-Veg Main Course</summary><div class="menu-grid">
+<div class="card"><h4>Butter Chicken</h4><p>₹270/350</p><button onclick="add('Butter Chicken',270)">Add</button></div>
+<div class="card"><h4>Tawa Chicken</h4><p>₹280/520</p><button onclick="add('Tawa Chicken',280)">Add</button></div>
+<div class="card"><h4>Kadhai Chicken</h4><p>₹280/520</p><button onclick="add('Kadhai Chicken',280)">Add</button></div>
+<div class="card"><h4>Chicken Lababdar</h4><p>₹280/520</p><button onclick="add('Chicken Lababdar',280)">Add</button></div>
+<div class="card"><h4>Chicken Tikka Masala</h4><p>₹300/540</p><button onclick="add('Chicken Tikka Masala',300)">Add</button></div>
+<div class="card"><h4>Chicken Curry</h4><p>₹240/450</p><button onclick="add('Chicken Curry',240)">Add</button></div>
+<div class="card"><h4>Chicken Do Pyaza</h4><p>₹280/520</p><button onclick="add('Chicken Do Pyaza',280)">Add</button></div>
+<div class="card"><h4>Chicken Rara</h4><p>₹320/550</p><button onclick="add('Chicken Rara',320)">Add</button></div>
+<div class="card"><h4>Mutton Rogan Josh</h4><p>₹340/600</p><button onclick="add('Mutton Rogan Josh',340)">Add</button></div>
+<div class="card"><h4>Mutton Rara</h4><p>₹350/650</p><button onclick="add('Mutton Rara',350)">Add</button></div>
+<div class="card"><h4>Mutton Masala</h4><p>₹340/600</p><button onclick="add('Mutton Masala',340)">Add</button></div>
+<div class="card"><h4>Fish Curry</h4><p>₹350</p><button onclick="add('Fish Curry',350)">Add</button></div>
+<div class="card"><h4>Egg Curry</h4><p>₹200/300</p><button onclick="add('Egg Curry',200)">Add</button></div>
+</div></details><!-- VEG MAIN COURSE --><details><summary>🍛 Veg Main Course</summary><div class="menu-grid">
+<div class="card"><h4>Dal Tadka</h4><p>₹230</p><button onclick="add('Dal Tadka',230)">Add</button></div>
+<div class="card"><h4>Dal Fry</h4><p>₹200</p><button onclick="add('Dal Fry',200)">Add</button></div>
+<div class="card"><h4>Dal Makhani</h4><p>₹250</p><button onclick="add('Dal Makhani',250)">Add</button></div>
+<div class="card"><h4>Masala Chaap</h4><p>₹250</p><button onclick="add('Masala Chaap',250)">Add</button></div>
+<div class="card"><h4>Mix Veg</h4><p>₹200</p><button onclick="add('Mix Veg',200)">Add</button></div>
+<div class="card"><h4>Mushroom Masala</h4><p>₹250</p><button onclick="add('Mushroom Masala',250)">Add</button></div>
+<div class="card"><h4>Kadhai Paneer</h4><p>₹280</p><button onclick="add('Kadhai Paneer',280)">Add</button></div>
+<div class="card"><h4>Paneer Lababdar</h4><p>₹290</p><button onclick="add('Paneer Lababdar',290)">Add</button></div>
+<div class="card"><h4>Paneer Do Pyaza</h4><p>₹280</p><button onclick="add('Paneer Do Pyaza',280)">Add</button></div>
+<div class="card"><h4>Paneer Tikka Masala</h4><p>₹300</p><button onclick="add('Paneer Tikka Masala',300)">Add</button></div>
+<div class="card"><h4>Paneer Butter Masala</h4><p>₹280</p><button onclick="add('Paneer Butter Masala',280)">Add</button></div>
+<div class="card"><h4>Jeera Aloo</h4><p>₹200</p><button onclick="add('Jeera Aloo',200)">Add</button></div>
+<div class="card"><h4>Mushroom Do Pyaza</h4><p>₹250</p><button onclick="add('Mushroom Do Pyaza',250)">Add</button></div>
+</div></details><!-- RICE --><details><summary>🍚 Rice</summary><div class="menu-grid">
+<div class="card"><h4>Steam Rice</h4><p>₹120</p><button onclick="add('Steam Rice',120)">Add</button></div>
+<div class="card"><h4>Jeera Rice</h4><p>₹140</p><button onclick="add('Jeera Rice',140)">Add</button></div>
+<div class="card"><h4>Veg Biryani</h4><p>₹180</p><button onclick="add('Veg Biryani',180)">Add</button></div>
+<div class="card"><h4>Veg Fried Rice</h4><p>₹180</p><button onclick="add('Veg Fried Rice',180)">Add</button></div>
+<div class="card"><h4>Khichdi</h4><p>₹150</p><button onclick="add('Khichdi',150)">Add</button></div>
+<div class="card"><h4>Veg Schezwan Fried Rice</h4><p>₹170</p><button onclick="add('Veg Schezwan Fried Rice',170)">Add</button></div>
+<div class="card"><h4>Egg Biryani</h4><p>₹200</p><button onclick="add('Egg Biryani',200)">Add</button></div>
+<div class="card"><h4>Egg Fried Rice</h4><p>₹200</p><button onclick="add('Egg Fried Rice',200)">Add</button></div>
+<div class="card"><h4>Chicken Biryani</h4><p>₹230</p><button onclick="add('Chicken Biryani',230)">Add</button></div>
+<div class="card"><h4>Chicken Fried Rice</h4><p>₹230</p><button onclick="add('Chicken Fried Rice',230)">Add</button></div>
+<div class="card"><h4>Mutton Biryani</h4><p>₹330</p><button onclick="add('Mutton Biryani',330)">Add</button></div>
+</div></details><!-- NOODLES --><details><summary>🍝 Noodles</summary><div class="menu-grid">
+<div class="card"><h4>Veg Hakka Noodles</h4><p>₹150</p><button onclick="add('Veg Hakka Noodles',150)">Add</button></div>
+<div class="card"><h4>Veg Schezwan Noodles</h4><p>₹170</p><button onclick="add('Veg Schezwan Noodles',170)">Add</button></div>
+<div class="card"><h4>Veg Chilly Garlic Noodles</h4><p>₹170</p><button onclick="add('Veg Chilly Garlic Noodles',170)">Add</button></div>
+<div class="card"><h4>Egg Hakka Noodles</h4><p>₹180</p><button onclick="add('Egg Hakka Noodles',180)">Add</button></div>
+<div class="card"><h4>Egg Schezwan Noodles</h4><p>₹190</p><button onclick="add('Egg Schezwan Noodles',190)">Add</button></div>
+<div class="card"><h4>Egg Chilly Noodles</h4><p>₹190</p><button onclick="add('Egg Chilly Noodles',190)">Add</button></div>
+<div class="card"><h4>Chicken Hakka Noodles</h4><p>₹200</p><button onclick="add('Chicken Hakka Noodles',200)">Add</button></div>
+<div class="card"><h4>Chicken Schezwan Noodles</h4><p>₹220</p><button onclick="add('Chicken Schezwan Noodles',220)">Add</button></div>
+<div class="card"><h4>Chicken Chilly Noodles</h4><p>₹220</p><button onclick="add('Chicken Chilly Noodles',220)">Add</button></div>
+</div></details></section><section id="cart">
+<h2>Your Cart</h2>
+<div id="cartBox"></div>
 <h3>Total: ₹<span id="total">0</span></h3>
+</section><section id="checkout">
+<h2>Checkout</h2>
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<textarea id="address" placeholder="Address"></textarea>
+<input id="otp" placeholder="Enter OTP (0000)">
+<button onclick="placeOrder()">Place Order</button>
+<p id="status"></p>
+</section><section id="admin">
+<h2>Admin Panel</h2>
+<input type="password" id="adminPass" placeholder="Password">
+<button onclick="adminLogin()">Login</button>
+<div id="adminPanel" style="display:none"><div id="orders"></div></div>
+</section><footer>© 2026 Kabab & Curry</footer><script>
+const ADMIN_PASS="admin123";
+const OTP="0000";
+let cart=[];let total=0;let orders=[];
 
-<button onclick="placeOrder()">Confirm Order</button>
-</section>
+function add(name,price){cart.push({name,price});total+=price;render();}
+function render(){let h="";cart.forEach((i,n)=>{h+=`${n+1}. ${i.name} - ₹${i.price}<br>`});document.getElementById("cartBox").innerHTML=h;document.getElementById("total").innerText=total}
 
-<!-- ADMIN -->
-<section id="admin" style="display:none">
-<h3>Admin Panel</h3>
-<div id="orders"></div>
-<button onclick="downloadReport()">Download Daily Report</button>
-</section>
-
-<script>
-
-/* FIREBASE CONFIG (REPLACE WITH YOURS) */
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-/* OTP LOGIN */
-let confirmation;
-
-window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha');
-
-function sendOTP(){
- const phone=document.getElementById("phone").value;
- auth.signInWithPhoneNumber(phone,window.recaptchaVerifier)
- .then(res=>{
- confirmation=res;
- alert("OTP Sent");
- });
-}
-
-function verifyOTP(){
- const code=document.getElementById("otp").value;
- confirmation.confirm(code).then(res=>{
- document.getElementById("login").style.display="none";
- document.getElementById("order").style.display="block";
- loadAdmin();
- });
-}
-
-/* CART */
-let cart=[];let total=0;
-
-function add(){
- const sel=document.getElementById("item");
- const price=parseInt(sel.value);
- const name=sel.options[sel.selectedIndex].text;
- const qty=parseInt(document.getElementById("qty").value);
-
- cart.push({name,price,qty});
- total+=price*qty;
- render();
-}
-
-function render(){
- let html="";
- cart.forEach(i=>{
- html+=`${i.name} x ${i.qty}<br>`;
- });
- document.getElementById("cart").innerHTML=html;
- document.getElementById("total").innerText=total;
-}
-
-/* PLACE ORDER */
 function placeOrder(){
- const user=auth.currentUser.phoneNumber;
-
- db.collection("orders").add({
-  user:user,
-  items:cart,
-  total:total,
-  status:"Pending",
-  date:new Date()
- });
-
- alert("Order Placed. You will get confirmation.");
- cart=[];total=0;render();
+ let o=document.getElementById("otp").value;
+ let n=document.getElementById("name").value;
+ let p=document.getElementById("phone").value;
+ let a=document.getElementById("address").value;
+ if(o!==OTP){alert("Wrong OTP");return}
+ if(n===""||p===""||a===""||cart.length===0){alert("Fill all details");return}
+ orders.push({name:n,phone:p,address:a,items:cart,total:total,status:"Pending"});
+ cart=[];total=0;render();document.getElementById("status").innerText="Order Placed. Waiting for confirmation.";
 }
 
-/* ADMIN PANEL */
-function loadAdmin(){
- auth.onAuthStateChanged(user=>{
-  if(user && user.phoneNumber==="+919630697343"){
-   document.getElementById("admin").style.display="block";
-   fetchOrders();
-  }
- });
-}
-
-function fetchOrders(){
- db.collection("orders").onSnapshot(snap=>{
-  let html="";
-  snap.forEach(doc=>{
-   let o=doc.data();
-   html+=`<div class='card'>
-   ${o.user}<br>Total ₹${o.total}<br>Status:${o.status}
-   <button onclick=confirm('${doc.id}')>Confirm</button>
-   </div>`;
-  });
-  document.getElementById("orders").innerHTML=html;
- });
-}
-
-function confirm(id){
- db.collection("orders").doc(id).update({status:"Confirmed"});
-}
-
-/* REPORT */
-function downloadReport(){
- db.collection("orders").get().then(snap=>{
-  let csv="User,Total,Status\n";
-  snap.forEach(d=>{
-   let o=d.data();
-   csv+=`${o.user},${o.total},${o.status}\n`;
-  });
-
-  let blob=new Blob([csv]);
-  let a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="sales.csv";
-  a.click();
- });
-}
-
-</script>
-</body>
+function adminLogin(){if(document.getElementById("adminPass").value===ADMIN_PASS){document.getElementById("adminPanel").style.display="block";showOrders()}else alert("Wrong Password")}
+function showOrders(){let h="";orders.forEach((o,i)=>{h+=`<div class='card'><b>${o.name}</b> ₹${o.total}<br>${o.status}<br><button onclick='confirm(${i})'>Confirm</button></div>`});document.getElementById("orders").innerHTML=h}
+function confirm(i){orders[i].status="Confirmed";showOrders()}
+</script></body>
 </html>
