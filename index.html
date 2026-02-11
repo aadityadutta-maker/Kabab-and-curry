@@ -1,416 +1,194 @@
 <!DOCTYPE html>
+<!-- FULL CLOUD SYSTEM TEMPLATE USING FIREBASE -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kabab & Curry | Cloud System</title>
 
-<title>Kabab & Curry</title>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-
-/* ========== GENERAL ========== */
-
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#f7f7f7;
-}
-
-header{
-background:black;
-color:white;
-text-align:center;
-padding:20px;
-}
-
-header img{
-width:180px;
-margin-bottom:10px;
-}
-
-nav{
-background:#222;
-text-align:center;
-padding:10px;
-}
-
-nav a{
-color:white;
-margin:0 15px;
-text-decoration:none;
-font-weight:bold;
-}
-
-section{
-max-width:1200px;
-margin:auto;
-padding:25px;
-}
-
-h2{
-border-bottom:2px solid #e63946;
-padding-bottom:5px;
-}
-
-footer{
-background:black;
-color:white;
-text-align:center;
-padding:15px;
-}
-
-
-/* ========== MENU DROPDOWN ========== */
-
-.menu-section{
-background:white;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,.1);
-overflow:hidden;
-}
-
-.menu-title{
-background:#e63946;
-color:white;
-padding:15px;
-font-size:20px;
-cursor:pointer;
-}
-
-.menu-content{
-display:none;
-padding:15px;
-animation:slide 0.4s ease;
-}
-
-@keyframes slide{
-from{opacity:0;transform:translateY(-10px)}
-to{opacity:1;transform:translateY(0)}
-}
-
-
-/* ========== FOOD CARD ========== */
-
-.food-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-}
-
-.food-card{
-border:1px solid #ddd;
-border-radius:10px;
-overflow:hidden;
-text-align:center;
-transition:0.3s;
-}
-
-.food-card:hover{
-transform:scale(1.05);
-box-shadow:0 5px 15px rgba(0,0,0,.3);
-}
-
-.food-card img{
-width:100%;
-height:150px;
-object-fit:cover;
-}
-
-.food-card h4{
-margin:8px 0;
-}
-
-.food-card p{
-color:#e63946;
-font-weight:bold;
-}
-
-.food-card button{
-background:#e63946;
-color:white;
-border:none;
-padding:7px 12px;
-border-radius:5px;
-cursor:pointer;
-margin-bottom:10px;
-}
-
-
-/* ========== CART ========== */
-
-#cart{
-background:white;
-border-radius:10px;
-padding:20px;
-box-shadow:0 2px 5px rgba(0,0,0,.1);
-}
-
+body{font-family:Arial;background:#f7f7f7;margin:0}
+header{background:#111;color:#fff;text-align:center;padding:15px}
+section{max-width:900px;margin:auto;padding:20px}
+input,button{padding:10px;margin:5px;width:100%}
+button{background:#e63946;color:#fff;border:none}
+.card{background:#fff;padding:15px;margin:10px 0;border-radius:8px}
 </style>
 </head>
-
-
 <body>
 
-<!-- HEADER -->
-
 <header>
-
-<img src="logo.png">
-
-<h1>Kabab & Curry</h1>
-<p>Swad Dilli Ka | Rishikesh</p>
-
+<h2>Kabab & Curry – Cloud Order System</h2>
 </header>
 
+<!-- LOGIN -->
+<section id="login">
+<h3>Customer Login (OTP)</h3>
+<input id="phone" placeholder="+91XXXXXXXXXX">
+<button onclick="sendOTP()">Send OTP</button>
 
-<!-- NAV -->
+<input id="otp" placeholder="Enter OTP">
+<button onclick="verifyOTP()">Verify</button>
 
-<nav>
-<a href="#menu">Menu</a>
-<a href="#cart">Cart</a>
-</nav>
-
-
-<!-- MENU -->
-
-<section id="menu">
-
-<h2>Our Menu</h2>
-
-
-<!-- SOUPS -->
-
-<div class="menu-section">
-
-<div class="menu-title" onclick="toggle(this)">
-🥣 Soups
-</div>
-
-<div class="menu-content">
-
-<div class="food-grid">
-
-<div class="food-card">
-<img src="images/soup.jpg">
-<h4>Veg Clear Soup</h4>
-<p>₹80</p>
-<button onclick="add('Veg Clear Soup',80)">Add</button>
-</div>
-
-<div class="food-card">
-<img src="images/soup.jpg">
-<h4>Chicken Soup</h4>
-<p>₹130</p>
-<button onclick="add('Chicken Soup',130)">Add</button>
-</div>
-
-</div>
-</div>
-</div>
-
-
-<!-- VEG STARTER -->
-
-<div class="menu-section">
-
-<div class="menu-title" onclick="toggle(this)">
-🥗 Veg Starters
-</div>
-
-<div class="menu-content">
-
-<div class="food-grid">
-
-<div class="food-card">
-<img src="images/paneer.jpg">
-<h4>Paneer Tikka</h4>
-<p>₹250</p>
-<button onclick="add('Paneer Tikka',250)">Add</button>
-</div>
-
-<div class="food-card">
-<img src="images/paneer.jpg">
-<h4>Malai Chaap</h4>
-<p>₹270</p>
-<button onclick="add('Malai Chaap',270)">Add</button>
-</div>
-
-</div>
-</div>
-</div>
-
-
-<!-- NON VEG -->
-
-<div class="menu-section">
-
-<div class="menu-title" onclick="toggle(this)">
-🍗 Non-Veg Starters
-</div>
-
-<div class="menu-content">
-
-<div class="food-grid">
-
-<div class="food-card">
-<img src="images/chicken.jpg">
-<h4>Chicken Tikka</h4>
-<p>₹280</p>
-<button onclick="add('Chicken Tikka',280)">Add</button>
-</div>
-
-<div class="food-card">
-<img src="images/chicken.jpg">
-<h4>Chicken Lollipop</h4>
-<p>₹300</p>
-<button onclick="add('Chicken Lollipop',300)">Add</button>
-</div>
-
-</div>
-</div>
-</div>
-
-
-<!-- RICE -->
-
-<div class="menu-section">
-
-<div class="menu-title" onclick="toggle(this)">
-🍚 Rice & Biryani
-</div>
-
-<div class="menu-content">
-
-<div class="food-grid">
-
-<div class="food-card">
-<img src="images/biryani.jpg">
-<h4>Chicken Biryani</h4>
-<p>₹230</p>
-<button onclick="add('Chicken Biryani',230)">Add</button>
-</div>
-
-<div class="food-card">
-<img src="images/biryani.jpg">
-<h4>Mutton Biryani</h4>
-<p>₹330</p>
-<button onclick="add('Mutton Biryani',330)">Add</button>
-</div>
-
-</div>
-</div>
-</div>
-
-
-<!-- NOODLES -->
-
-<div class="menu-section">
-
-<div class="menu-title" onclick="toggle(this)">
-🍜 Noodles
-</div>
-
-<div class="menu-content">
-
-<div class="food-grid">
-
-<div class="food-card">
-<img src="images/noodles.jpg">
-<h4>Veg Hakka Noodles</h4>
-<p>₹150</p>
-<button onclick="add('Veg Hakka',150)">Add</button>
-</div>
-
-<div class="food-card">
-<img src="images/noodles.jpg">
-<h4>Chicken Noodles</h4>
-<p>₹200</p>
-<button onclick="add('Chicken Noodles',200)">Add</button>
-</div>
-
-</div>
-</div>
-</div>
-
-
+<div id="recaptcha"></div>
 </section>
 
+<!-- ORDER -->
+<section id="order" style="display:none">
+<h3>Place Order</h3>
 
-<!-- CART -->
+<select id="item">
+<option value="80">Veg Clear Soup – ₹80</option>
+<option value="250">Paneer Tikka – ₹250</option>
+<option value="280">Chicken Tikka – ₹280</option>
+<option value="280">Chilly Chicken – ₹280</option>
+</select>
 
-<section id="cart">
+<input id="qty" type="number" value="1">
+<button onclick="add()">Add</button>
 
-<h2>Your Cart</h2>
+<div id="cart"></div>
+<h3>Total: ₹<span id="total">0</span></h3>
 
-<div id="cartItems"></div>
-
-<h3>Total: ₹ <span id="total">0</span></h3>
-
+<button onclick="placeOrder()">Confirm Order</button>
 </section>
 
-
-<!-- FOOTER -->
-
-<footer>
-© 2026 Kabab & Curry
-</footer>
-
-
+<!-- ADMIN -->
+<section id="admin" style="display:none">
+<h3>Admin Panel</h3>
+<div id="orders"></div>
+<button onclick="downloadReport()">Download Daily Report</button>
+</section>
 
 <script>
 
-/* CART */
+/* FIREBASE CONFIG (REPLACE WITH YOURS) */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
 
-let cart=[];
-let total=0;
+firebase.initializeApp(firebaseConfig);
 
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-function add(name,price){
+/* OTP LOGIN */
+let confirmation;
 
-cart.push({name,price});
-total+=price;
+window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha');
 
-render();
-
+function sendOTP(){
+ const phone=document.getElementById("phone").value;
+ auth.signInWithPhoneNumber(phone,window.recaptchaVerifier)
+ .then(res=>{
+ confirmation=res;
+ alert("OTP Sent");
+ });
 }
 
+function verifyOTP(){
+ const code=document.getElementById("otp").value;
+ confirmation.confirm(code).then(res=>{
+ document.getElementById("login").style.display="none";
+ document.getElementById("order").style.display="block";
+ loadAdmin();
+ });
+}
+
+/* CART */
+let cart=[];let total=0;
+
+function add(){
+ const sel=document.getElementById("item");
+ const price=parseInt(sel.value);
+ const name=sel.options[sel.selectedIndex].text;
+ const qty=parseInt(document.getElementById("qty").value);
+
+ cart.push({name,price,qty});
+ total+=price*qty;
+ render();
+}
 
 function render(){
-
-let html="";
-
-cart.forEach((i,n)=>{
-
-html+=`${n+1}. ${i.name} - ₹${i.price}<br>`;
-
-});
-
-cartItems.innerHTML=html;
-totalSpan.innerText=total;
-
+ let html="";
+ cart.forEach(i=>{
+ html+=`${i.name} x ${i.qty}<br>`;
+ });
+ document.getElementById("cart").innerHTML=html;
+ document.getElementById("total").innerText=total;
 }
 
-const cartItems=document.getElementById("cartItems");
-const totalSpan=document.getElementById("total");
+/* PLACE ORDER */
+function placeOrder(){
+ const user=auth.currentUser.phoneNumber;
 
+ db.collection("orders").add({
+  user:user,
+  items:cart,
+  total:total,
+  status:"Pending",
+  date:new Date()
+ });
 
-/* DROPDOWN */
-
-function toggle(x){
-
-let content=x.nextElementSibling;
-
-if(content.style.display==="block"){
-content.style.display="none";
-}else{
-content.style.display="block";
+ alert("Order Placed. You will get confirmation.");
+ cart=[];total=0;render();
 }
 
+/* ADMIN PANEL */
+function loadAdmin(){
+ auth.onAuthStateChanged(user=>{
+  if(user && user.phoneNumber==="+919630697343"){
+   document.getElementById("admin").style.display="block";
+   fetchOrders();
+  }
+ });
+}
+
+function fetchOrders(){
+ db.collection("orders").onSnapshot(snap=>{
+  let html="";
+  snap.forEach(doc=>{
+   let o=doc.data();
+   html+=`<div class='card'>
+   ${o.user}<br>Total ₹${o.total}<br>Status:${o.status}
+   <button onclick=confirm('${doc.id}')>Confirm</button>
+   </div>`;
+  });
+  document.getElementById("orders").innerHTML=html;
+ });
+}
+
+function confirm(id){
+ db.collection("orders").doc(id).update({status:"Confirmed"});
+}
+
+/* REPORT */
+function downloadReport(){
+ db.collection("orders").get().then(snap=>{
+  let csv="User,Total,Status\n";
+  snap.forEach(d=>{
+   let o=d.data();
+   csv+=`${o.user},${o.total},${o.status}\n`;
+  });
+
+  let blob=new Blob([csv]);
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="sales.csv";
+  a.click();
+ });
 }
 
 </script>
-
-
 </body>
 </html>
