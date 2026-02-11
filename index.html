@@ -8,11 +8,9 @@
 
 <style>
 
-/* ========== BASIC STYLE ========== */
-
 body{
 margin:0;
-font-family:Arial, sans-serif;
+font-family:Arial;
 background:#f7f7f7;
 }
 
@@ -54,9 +52,6 @@ text-align:center;
 padding:15px;
 }
 
-
-/* ========== MENU ========== */
-
 .menu-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
@@ -80,9 +75,6 @@ border-radius:5px;
 cursor:pointer;
 }
 
-
-/* ========== FORM ========== */
-
 input,textarea{
 width:100%;
 padding:8px;
@@ -98,31 +90,28 @@ cursor:pointer;
 border-radius:5px;
 }
 
-
-/* ========== BOXES ========== */
-
-#cart,#adminPanel{
+#cart,#adminPanel,#otpBox{
 background:white;
 padding:20px;
 border-radius:10px;
 box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
+#otpBox{
+display:none;
+margin-top:15px;
+border:2px dashed #e63946;
+}
+
 </style>
 </head>
 
-
 <body>
-
-<!-- ================= HEADER ================= -->
 
 <header>
 <h1>Kabab & Curry</h1>
 <p>Swad Dilli Ka | Rishikesh</p>
 </header>
-
-
-<!-- ================= NAV ================= -->
 
 <nav>
 <a href="#menu">Menu</a>
@@ -132,7 +121,7 @@ box-shadow:0 2px 5px rgba(0,0,0,.1);
 </nav>
 
 
-<!-- ================= MENU ================= -->
+<!-- MENU -->
 
 <section id="menu">
 
@@ -169,7 +158,7 @@ box-shadow:0 2px 5px rgba(0,0,0,.1);
 </section>
 
 
-<!-- ================= CART ================= -->
+<!-- CART -->
 
 <section id="cart">
 
@@ -182,59 +171,41 @@ box-shadow:0 2px 5px rgba(0,0,0,.1);
 </section>
 
 
-<!-- ================= BILLING ================= -->
+<!-- BILLING -->
 
 <section id="billing">
 
-<h2>Login with OTP</h2>
+<h2>Billing</h2>
+
+<!-- BILL FORM -->
+
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<textarea id="address" placeholder="Address"></textarea>
+
+<button onclick="startOTP()">Place Order</button>
+
+<p id="msg"></p>
 
 
-<!-- LOGIN -->
+<!-- OTP BOX -->
 
-<div id="loginBox">
+<div id="otpBox">
 
-<input id="loginPhone" placeholder="Enter Mobile Number">
-
-<button onclick="sendOTP()">Send OTP</button>
-
-</div>
-
-
-<!-- OTP -->
-
-<div id="otpBox" style="display:none">
+<h3>OTP Verification</h3>
 
 <input id="otpInput" placeholder="Enter OTP">
 
-<button onclick="verifyOTP()">Verify OTP</button>
+<button onclick="verifyOTP()">Verify & Confirm</button>
 
 <p id="otpMsg"></p>
-
-</div>
-
-
-<!-- PAYMENT -->
-
-<div id="paymentBox" style="display:none">
-
-<h3>Billing Details</h3>
-
-<input id="name" placeholder="Name">
-
-<input id="phone" placeholder="Phone">
-
-<textarea id="address" placeholder="Address"></textarea>
-
-<button onclick="placeOrder()">Place Order</button>
-
-<p id="msg"></p>
 
 </div>
 
 </section>
 
 
-<!-- ================= ADMIN ================= -->
+<!-- ADMIN -->
 
 <section id="admin">
 
@@ -243,7 +214,6 @@ box-shadow:0 2px 5px rgba(0,0,0,.1);
 <input type="password" id="adminPass" placeholder="Password">
 
 <button onclick="adminLogin()">Login</button>
-
 
 <div id="adminPanel" style="display:none">
 
@@ -256,164 +226,138 @@ box-shadow:0 2px 5px rgba(0,0,0,.1);
 </section>
 
 
-<!-- ================= FOOTER ================= -->
-
 <footer>
 © 2026 Kabab & Curry
 </footer>
 
 
-
-<!-- ================= SCRIPT ================= -->
-
 <script>
 
-/* ===== CART SYSTEM ===== */
+/* CART */
 
 let cart=[];
 let total=0;
 let orders=[];
 
-
 function add(name,price){
 
 cart.push({name,price});
 total+=price;
-
 render();
 
 }
-
 
 function render(){
 
 let html="";
 
-cart.forEach((item,i)=>{
+cart.forEach((i,n)=>{
 
-html+=`${i+1}. ${item.name} - ₹${item.price}<br>`;
+html+=`${n+1}. ${i.name} - ₹${i.price}<br>`;
 
 });
 
-document.getElementById("cartItems").innerHTML=html;
-document.getElementById("total").innerText=total;
+cartItems.innerHTML=html;
+totalSpan.innerText=total;
 
 }
 
+const cartItems=document.getElementById("cartItems");
+const totalSpan=document.getElementById("total");
 
-/* ===== DEMO OTP ===== */
+
+/* OTP SYSTEM */
 
 let demoOTP="";
-let verified=false;
+let otpVerified=false;
 
 
-function sendOTP(){
+// Start OTP
+function startOTP(){
 
-let phone=document.getElementById("loginPhone").value;
-
-if(phone.length<10){
-
-alert("Enter valid mobile number");
-return;
-
-}
-
-// Generate 4 digit OTP
-demoOTP=Math.floor(1000+Math.random()*9000);
-
-// Show OTP (DEMO)
-alert("Your OTP is: "+demoOTP);
-
-document.getElementById("otpBox").style.display="block";
-
-}
-
-
-function verifyOTP(){
-
-let userOTP=document.getElementById("otpInput").value;
-
-if(userOTP==demoOTP){
-
-verified=true;
-
-document.getElementById("otpMsg").innerText="✅ Verified Successfully";
-
-document.getElementById("loginBox").style.display="none";
-document.getElementById("otpBox").style.display="none";
-
-document.getElementById("paymentBox").style.display="block";
-
-}else{
-
-document.getElementById("otpMsg").innerText="❌ Wrong OTP";
-
-}
-
-}
-
-
-/* ===== ORDER SYSTEM ===== */
-
-function placeOrder(){
-
-if(!verified){
-
-alert("Please verify OTP first");
-return;
-
-}
-
-let n=document.getElementById("name").value;
-let p=document.getElementById("phone").value;
-let a=document.getElementById("address").value;
-
+let n=name.value;
+let p=phone.value;
+let a=address.value;
 
 if(n==""||p==""||a==""||cart.length==0){
 
-alert("Fill all details and add items");
+alert("Fill all details & add items");
 return;
 
 }
 
+// Generate OTP
+demoOTP=Math.floor(1000+Math.random()*9000);
+
+alert("Your OTP: "+demoOTP); // DEMO
+
+otpBox.style.display="block";
+
+}
+
+
+// Verify OTP
+function verifyOTP(){
+
+if(otpInput.value==demoOTP){
+
+otpVerified=true;
+
+otpMsg.innerText="✅ Verified";
+
+finalOrder();
+
+}else{
+
+otpMsg.innerText="❌ Wrong OTP";
+
+}
+
+}
+
+
+/* FINAL ORDER */
+
+function finalOrder(){
+
+if(!otpVerified) return;
 
 orders.push({
 
-name:n,
-phone:p,
-address:a,
+name:name.value,
+phone:phone.value,
+address:address.value,
 items:[...cart],
 total:total,
 status:"Pending"
 
 });
 
-
 cart=[];
 total=0;
 
 render();
 
-document.getElementById("msg").innerText="Order Placed Successfully ✅";
+msg.innerText="Order Placed Successfully ✅";
 
-alert("Order Sent");
+alert("Order Confirmed");
+
+otpBox.style.display="none";
+
+otpVerified=false;
 
 }
 
 
-/* ===== ADMIN ===== */
+/* ADMIN */
 
 const PASSWORD="admin123";
 
-
 function adminLogin(){
 
-let pass=document.getElementById("adminPass").value;
+if(adminPass.value==="admin123"){
 
-if(pass===PASSWORD){
-
-document.getElementById("adminPanel").style.display="block";
-
+adminPanel.style.display="block";
 showOrders();
 
 }else{
@@ -423,7 +367,6 @@ alert("Wrong Password");
 }
 
 }
-
 
 function showOrders(){
 
@@ -439,11 +382,11 @@ html+=`
 
 ${o.address}<br>
 
-Items: ${o.items.map(x=>x.name).join(", ")}<br>
+${o.items.map(x=>x.name).join(", ")}<br>
 
-Total: ₹${o.total}<br>
+₹${o.total}<br>
 
-Status: ${o.status}<br>
+${o.status}<br>
 
 <button onclick="confirm(${i})">Confirm</button>
 
@@ -453,16 +396,15 @@ Status: ${o.status}<br>
 
 });
 
-document.getElementById("orders").innerHTML=html;
+orders.innerHTML=html;
 
 }
-
 
 function confirm(i){
 
 orders[i].status="Confirmed";
 
-alert("Order Confirmed");
+alert("Confirmed");
 
 showOrders();
 
